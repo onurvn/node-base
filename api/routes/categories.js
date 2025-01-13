@@ -5,6 +5,7 @@ const Categories = require("../db/models/Categories");
 const Response = require("../lib/Response");
 const CustomError = require("../lib/Error");
 const AuditLogs = require("../lib/AuditLogs");
+const logger = require("../lib/log/LoggerClas");
 const Enum = require("../config/Enum");
 
 /* GET Categories listing. */
@@ -40,9 +41,11 @@ router.post("/add", async (req, res) => {
     await category.save();
 
     AuditLogs.info(req.user?.email, "Categories", "Add", category);
+    logger.info(req.user?.email, "Categories", "Add", category);
 
     res.json(Response.successResponse({ success: true }));
   } catch (error) {
+    logger.error(req.user?.email, "Categories", "Add", error);
     let errorResponse = Response.errorResponse(error);
     res.status(errorResponse.code).json(errorResponse);
   }
