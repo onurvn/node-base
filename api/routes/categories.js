@@ -9,6 +9,7 @@ const logger = require("../lib/log/LoggerClas");
 const Enum = require("../config/Enum");
 
 /* GET Categories listing. */
+// eslint-disable-next-line no-unused-vars
 router.get("/", async (req, res, next) => {
   try {
     let categories = await Categories.find({});

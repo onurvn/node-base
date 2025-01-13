@@ -1,4 +1,4 @@
-const { format, createLogger, transports, info } = require("winston");
+const { format, createLogger, transports } = require("winston");
 
 const { LOG_LEVEL } = require("../../config");
 
