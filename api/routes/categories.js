@@ -7,6 +7,11 @@ const CustomError = require("../lib/Error");
 const AuditLogs = require("../lib/AuditLogs");
 const logger = require("../lib/log/LoggerClas");
 const Enum = require("../config/Enum");
+const auth = require("../lib/auth")();
+
+router.all("*", auth.authenticate(), (req, res, next) => {
+  next();
+});
 
 /* GET Categories listing. */
 // eslint-disable-next-line no-unused-vars
