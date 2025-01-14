@@ -12,7 +12,7 @@ module.exports = () => {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
     }, async (payload, done) => {
         try {
-            let user = await Users.findOne({ id: payload.id });
+            let user = await Users.findOne({ _id: payload.id });
 
             if (user) {
                 let userRoles = await UserRoles.find({ user_id: payload.id });
