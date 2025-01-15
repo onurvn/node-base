@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const is = require("is_js");
 const bcrypt = require("bcrypt");
 
+const { DEFAULT_LANG } = require("../../config")
 const Enum = require("../../config/Enum");
 const CustomError = require("../../lib/Error");
 
@@ -13,6 +14,7 @@ const schema = mongoose.Schema(
     first_name: String,
     last_name: String,
     phone_number: String,
+    language: { type: String, default: DEFAULT_LANG }
   },
   {
     versionKey: false,
