@@ -15,7 +15,7 @@ router.all("*", auth.authenticate(), (req, res, next) => {
 
 /* GET Categories listing. */
 // eslint-disable-next-line no-unused-vars
-router.get("/", async (req, res, next) => {
+router.get("/", auth.checkRoles("category_view"), async (req, res, next) => {
   try {
     let categories = await Categories.find({});
 
@@ -27,7 +27,7 @@ router.get("/", async (req, res, next) => {
 });
 
 //add
-router.post("/add", async (req, res) => {
+router.post("/add", auth.checkRoles("category_add"), async (req, res) => {
   let body = req.body;
 
   try {
@@ -58,7 +58,7 @@ router.post("/add", async (req, res) => {
 });
 
 // update
-router.post("/update", async (req, res) => {
+router.post("/update", auth.checkRoles("category_update"), async (req, res) => {
   let body = req.body;
 
   try {
@@ -87,7 +87,7 @@ router.post("/update", async (req, res) => {
 });
 
 //delete
-router.post("/delete", async (req, res) => {
+router.post("/delete", auth.checkRoles("category_delete"), async (req, res) => {
   let body = req.body;
 
   try {
