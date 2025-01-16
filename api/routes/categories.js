@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const fs = require("fs");
 
 const Categories = require("../db/models/Categories");
 const Response = require("../lib/Response");
@@ -11,6 +12,7 @@ const config = require("../config");
 const auth = require("../lib/auth")();
 const i18n = new (require("../lib/i18n"))(config.DEFAULT_LANG);
 const emitter = require("../lib/Emitter");
+const Export = new (require("../lib/Export"))();
 
 router.all("*", auth.authenticate(), (req, res, next) => {
   next();
@@ -98,6 +100,31 @@ router.post("/delete", auth.checkRoles("category_delete"), async (req, res) => {
   } catch (error) {
     let errorResponse = Response.errorResponse(error);
     res.status(errorResponse.code).json(errorResponse);
+  }
+});
+
+//export
+router.post("/export", auth.checkRoles("category_export"), async (req, res) => {
+  try {
+    let categories = await Categories.find({});
+
+    let excel = Export.toExcel(
+      ["NAME", "IS_ACTIVE", "USER_ID", "CREATED_AT", "UPDATED_AT"],
+      ["name", "is_active", "created_by", "created_at", "updated_at"],
+      categories
+    )
+
+    let filePath = __dirname + "/../tmp/categories_excell" + Date.now() + ".xlsx";
+
+    fs.writeFileSync(filePath, excel, "UTF-8");
+
+    res.download(filePath);
+
+    // fs.unlinkSync(filePath);
+
+  } catch (error) {
+    let errorResponse = Response.errorResponse(error);
+    res.status(errorResponse.code).json(Response.errorResponse(error));
   }
 });
 
