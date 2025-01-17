@@ -205,6 +205,10 @@ router.post("/update", auth.checkRoles("user_update"), async (req, res) => {
 
     if (body.phone_number) updates.phone_number = body.phone_number
 
+    if (body._id == req.user.id) {
+      throw new CustomError(Enum.HTTP_CODES.FORBIDDEN, i18n.translate("COMMON.NEED.PERMISSIONS", req.user.language), i18n.translate("COMMON.VALIDATION_ERROR_TITLE", req.user.language, ["_id"]));
+    }
+
     if (Array.isArray(body.roles) && body.roles.length > 0) {
 
       let userRoles = await UserRoles.find({ user_id: body._id })
